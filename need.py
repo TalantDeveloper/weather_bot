@@ -2,7 +2,6 @@
 region = [
     {
         'name': 'Andijan',
-
     },
     {
         'name': 'Namangan',
@@ -41,7 +40,3 @@ region = [
         'name': 'Nukus',
     }
 ]
-
-for reg in region:
-    print(reg['name'])
-

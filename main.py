@@ -11,6 +11,7 @@ import logging
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import Application, CallbackQueryHandler, CommandHandler, ContextTypes
 import key
+import need
 
 TOKEN = key.TOKEN
 
@@ -26,14 +27,11 @@ logger = logging.getLogger(__name__)
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Sends a message with three inline buttons attached."""
-    keyboard = [
-        [
-            InlineKeyboardButton("Samarqand", callback_data="1"),
-            InlineKeyboardButton("Qashqadaryo", callback_data="2"),
-            
-        ],
-        [InlineKeyboardButton("Option 3", callback_data="3")],
-    ]
+    keyboard = []
+    for city in need.region:
+        keyboard.append([
+            InlineKeyboardButton(city['name'], callback_data=city['name'])
+        ])
 
     reply_markup = InlineKeyboardMarkup(keyboard)
 
@@ -43,10 +41,12 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 async def button(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Parses the CallbackQuery and updates the message text."""
     query = update.callback_query
+    print(update)
+    print(update.callback_query.from_user.id)
 
     # CallbackQueries need to be answered, even if no notification to the user is needed
     # Some clients may have trouble otherwise. See https://core.telegram.org/bots/api#callbackquery
-    await query.answer()
+    await context.bot.send_photo(chat_id=update.callback_query.from_user.id, photo=open('113.png', 'rb'))
 
     await query.edit_message_text(text=f"Selected option: {query.data}")
 
